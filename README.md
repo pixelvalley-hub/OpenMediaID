@@ -17,7 +17,7 @@ It allows developers, publishers, and teams to:
 - 📦 ZIP-based `.medid` container format
 - 📄 Metadata stored as human-readable JSON
 - 🖼 Supports thumbnails and preview media
-- 🛠 .NET 6+ library and NuGet package
+- 🛠 .NET 8+ library and NuGet package
 
 ---
 
@@ -113,4 +113,4 @@ var decrypted = EncryptedKeyManager.DecryptPrivateKey(encrypted, "MyPassword");
 
 ## 📄 License
 
-MIT License © 2025 OpenMedid Project
+MIT License © 2025 OpenMediaID Project
