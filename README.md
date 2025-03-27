@@ -113,4 +113,4 @@ var decrypted = EncryptedKeyManager.DecryptPrivateKey(encrypted, "MyPassword");
 
 ## 📄 License
 
-MIT License © 2025 OpenMediaID Project
+MIT License © 2025 OpenMediaID Project (Idea and Made by: Christof Rakowski)
