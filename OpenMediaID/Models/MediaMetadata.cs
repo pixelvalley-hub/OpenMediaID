@@ -8,24 +8,24 @@ namespace OpenMediaID.Models;
 public record MediaMetadata
 {
     /// <summary>
-    ///     Gets the width of the media file in pixels.
+    ///     Gets or sets the width of the media in pixels. This property is optional and may be null if the width is not
+    ///     available.
     /// </summary>
     /// <remarks>
-    ///     This property represents the horizontal dimension of the media file.
-    ///     The value is nullable, indicating that the width may not always be available.
+    ///     This property is typically populated when the media is an image or video.
     /// </remarks>
     [JsonPropertyName("width")]
-    public int? Width { get; init; }
+    public int? Width { get; set; }
 
     /// <summary>
-    ///     Gets or initializes the height of the media in pixels.
+    ///     Gets or sets the height of the media in pixels.
     /// </summary>
     /// <remarks>
-    ///     This property represents the vertical dimension of the media.
-    ///     A value of <c>null</c> indicates that the height is unspecified.
+    ///     This property represents the vertical dimension of the media file.
+    ///     It is nullable to account for cases where the height is unknown or not applicable.
     /// </remarks>
     [JsonPropertyName("height")]
-    public int? Height { get; init; }
+    public int? Height { get; set; }
 
     /// <summary>
     ///     Gets or initializes the duration of the media file.

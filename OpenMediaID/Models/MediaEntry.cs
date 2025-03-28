@@ -19,10 +19,11 @@ public record MediaEntry
     public required string Filename { get; init; }
 
     /// <summary>
-    ///     Gets the hash value of the media file, which serves as a unique identifier for its content.
+    ///     Gets or sets the hash value of the media file, which is used to uniquely identify its content.
+    ///     Defaults to "unknown" if not explicitly set.
     /// </summary>
     [JsonPropertyName("hash")]
-    public required string Hash { get; init; }
+    public string Hash { get; set; } = "unknown";
 
     /// <summary>
     ///     Gets the size of the media file in bytes.
@@ -34,37 +35,43 @@ public record MediaEntry
     public long LengthInBytes { get; init; }
 
     /// <summary>
-    ///     Gets the metadata associated with the media file, such as its dimensions, duration, and other properties.
+    ///     Gets or sets the metadata associated with the media entry, such as dimensions, duration, and other properties.
     /// </summary>
-    /// <value>
-    ///     An instance of <see cref="MediaMetadata" /> containing detailed metadata about the media file.
-    /// </value>
     [JsonPropertyName("metadata")]
-    public required MediaMetadata Metadata { get; init; }
+    public MediaMetadata Metadata { get; set; } = new();
 
     /// <summary>
-    ///     Gets the MIME type of the media file, which indicates the format of the file (e.g., "image/jpeg", "video/mp4").
+    ///     Gets or sets the file path of the media entry. This property is ignored during JSON serialization.
     /// </summary>
+    [JsonIgnore]
+    public string? FilePath { get; set; }
+
+    /// <summary>
+    ///     Gets or sets the MIME type of the media file.
+    /// </summary>
+    /// <remarks>
+    ///     The MIME type is used to indicate the format of the media file, such as "image/jpeg" or "video/mp4".
+    ///     Defaults to "application/unknown" if not explicitly set.
+    /// </remarks>
     [JsonPropertyName("mimeType")]
-    public required string MimeType { get; init; } //
+    public string MimeType { get; set; } = "application/unknown";
 
     /// <summary>
     ///     Gets or sets the optional path to the thumbnail image associated with the media file.
     /// </summary>
     /// <remarks>
-    ///     This property may contain a relative path, such as "thumbnails/video1.jpg",
-    ///     or be <c>null</c> if no thumbnail is available.
+    ///     This property may be <see langword="null" /> if no thumbnail is available.
     /// </remarks>
     [JsonPropertyName("thumbnailPath")]
-    public string? ThumbnailPath { get; init; }
+    public string? ThumbnailPath { get; set; }
 
     /// <summary>
-    ///     Gets or sets the optional path to the preview version of the media file.
+    ///     Gets or sets the optional path to the preview media associated with the media entry.
     /// </summary>
     /// <remarks>
-    ///     This property contain a relative path, such as "media/video1_preview.mp4", or be <c>null</c> if no preview media is
-    ///     available.
+    ///     This property provides a path to a preview version of the media file, which can be used for quick viewing or
+    ///     reduced-size display purposes. It is serialized as "previewMediaPath" in JSON.
     /// </remarks>
     [JsonPropertyName("previewMediaPath")]
-    public string? PreviewMediaPath { get; init; }
+    public string? PreviewMediaPath { get; set; }
 }
