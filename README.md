@@ -114,3 +114,12 @@ var decrypted = EncryptedKeyManager.DecryptPrivateKey(encrypted, "MyPassword");
 ## 📄 License
 
 MIT License © 2025 OpenMediaID Project (Idea and Made by: Christof Rakowski)
+
+## Copyright Notice
+
+This project utilizes the following open-source libraries:
+
+* **Blake3** ([https://www.nuget.org/packages/Blake3](https://www.nuget.org/packages/Blake3)), licensed under the BSD-2-Clause license.
+* **SixLabors.ImageSharp** ([https://www.nuget.org/packages/SixLabors.ImageSharp](https://www.nuget.org/packages/SixLabors.ImageSharp)), licensed under the Six Labors Split License, Version 1.0.
+
+Please refer to the respective license files for detailed terms and conditions.

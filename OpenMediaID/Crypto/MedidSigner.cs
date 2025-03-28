@@ -1,7 +1,6 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
-using System.Text.Json;
-using System.Text.Json.Serialization;
+using OpenMediaID.Extensions;
 using OpenMediaID.Models;
 
 namespace OpenMediaID.Crypto;
@@ -19,47 +18,38 @@ public static class MedidSigner
     ///     Signs the specified <see cref="OpenMediaID.Models.MedidFile" /> using the provided private key and signer details.
     /// </summary>
     /// <param name="medidFile">
-    ///     The <see cref="OpenMediaID.Models.MedidFile" /> instance to be signed. Its
-    ///     <see cref="OpenMediaID.Models.MedidFile.Signature" />
-    ///     property will be replaced with the generated signature.
+    ///     The <see cref="OpenMediaID.Models.MedidFile" /> to be signed. The signature will be added to this file.
     /// </param>
     /// <param name="privateKey">
-    ///     The private key in PKCS#8 format used to generate the digital signature.
+    ///     The RSA private key in PKCS#8 format used to generate the digital signature.
     /// </param>
     /// <param name="signerName">
-    ///     The name of the signer to be included in the signature metadata.
+    ///     The name of the signer, which will be included in the signature metadata.
     /// </param>
     /// <param name="publicKeyHint">
-    ///     An optional hint for identifying the public key associated with the private key.
+    ///     A hint or identifier for the corresponding public key, aiding in signature verification.
     /// </param>
     /// <returns>
-    ///     A new <see cref="OpenMediaID.Models.MedidFile" /> instance with the
-    ///     <see cref="OpenMediaID.Models.MedidFile.Signature" />
-    ///     property populated with the generated signature.
+    ///     A new instance of <see cref="OpenMediaID.Models.MedidFile" /> with the generated digital signature included.
     /// </returns>
-    /// <remarks>
-    ///     This method serializes the provided <see cref="OpenMediaID.Models.MedidFile" /> (excluding its signature), computes
-    ///     a digital signature using RSA with SHA-256, and returns a new instance of the file with the signature applied.
-    /// </remarks>
-    /// <exception cref="System.ArgumentNullException">
+    /// <exception cref="ArgumentNullException">
     ///     Thrown if <paramref name="medidFile" />, <paramref name="privateKey" />, or <paramref name="signerName" /> is
     ///     <c>null</c>.
     /// </exception>
-    /// <exception cref="System.Security.Cryptography.CryptographicException">
-    ///     Thrown if an error occurs during the signing process, such as an invalid private key.
+    /// <exception cref="CryptographicException">
+    ///     Thrown if the private key is invalid or if an error occurs during the signing process.
     /// </exception>
+    /// <remarks>
+    ///     This method ensures the integrity and authenticity of the <see cref="OpenMediaID.Models.MedidFile" /> by generating
+    ///     a digital signature using RSA cryptography. The signature is computed over the JSON representation of the file
+    ///     (excluding any existing signature) and is stored in the <see cref="OpenMediaID.Models.MedidFile.Signature" />
+    ///     property.
+    /// </remarks>
     public static MedidFile Sign(MedidFile medidFile, byte[] privateKey, string signerName, string publicKeyHint)
     {
         var unsigned = medidFile with { Signature = null };
 
-        string jsonToSign = JsonSerializer.Serialize(unsigned, new JsonSerializerOptions
-        {
-            WriteIndented = false,
-            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
-        });
-
-        byte[] data = Encoding.UTF8.GetBytes(jsonToSign);
+        byte[] data = Encoding.UTF8.GetBytes(unsigned.ToJson());
 
         using var rsa = RSA.Create();
         rsa.ImportPkcs8PrivateKey(privateKey, out _);
